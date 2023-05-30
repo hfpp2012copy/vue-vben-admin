@@ -63,11 +63,13 @@
         api: getAccountList,
         rowKey: 'id',
         columns,
+        // showIndexColumn: false,
         formConfig: {
           labelWidth: 120,
           schemas: searchFormSchema,
           autoSubmitOnEnter: true,
         },
+        pagination: { pageSize: 4 },
         useSearchForm: true,
         showTableSetting: true,
         bordered: true,
@@ -113,7 +115,7 @@
       }
 
       function handleSelect(deptId = '') {
-        searchInfo.deptId = deptId;
+        searchInfo.department = deptId;
         reload();
       }
 

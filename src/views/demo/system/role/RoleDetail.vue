@@ -1,28 +1,24 @@
 <template>
   <PageWrapper
-    :title="`用户` + userId + `的资料`"
-    content="这是用户资料详情页面。本页面仅用于演示相同路由在tab中打开多个页面并且显示不同的数据"
+    :title="`角色` + roleId + `的资料`"
+    content="这是角色资料详情页面。本页面仅用于演示相同路由在tab中打开多个页面并且显示不同的数据"
     contentBackground
     @back="goBack"
   >
-    <template #extra>
-      <a-button type="primary" danger> 禁用账号 </a-button>
-      <a-button type="primary"> 修改密码 </a-button>
-    </template>
     <template #footer>
       <a-tabs default-active-key="detail" v-model:activeKey="currentKey">
-        <a-tab-pane key="detail" tab="用户资料" />
-        <a-tab-pane key="logs" tab="操作日志" />
+        <a-tab-pane key="detail" tab="角色资料" />
       </a-tabs>
     </template>
     <div class="pt-4 m-4 desc-wrap">
       <template v-if="currentKey == 'detail'">
-        <div v-for="i in 10" :key="i">这是用户{{ userId }}资料Tab</div>
+        <div v-for="i in 10" :key="i">这是角色{{ roleId }}资料Tab</div>
       </template>
-      <template v-if="currentKey == 'logs'">
-        <div v-for="i in 10" :key="i">这是用户{{ userId }}操作日志Tab</div>
-      </template>
-      <div>{{ user?.email }}</div>
+      <ul>
+        <li v-for="item in role?.permissions" :key="item.id">
+          {{ item.name }}
+        </li>
+      </ul>
     </div>
   </PageWrapper>
 </template>
@@ -34,7 +30,7 @@
   import { useGo } from '/@/hooks/web/usePage';
   import { useTabs } from '/@/hooks/web/useTabs';
   import { Tabs } from 'ant-design-vue';
-  import { getAccountById } from '/@/api/demo/system';
+  import { getRoleById } from '/@/api/demo/system';
 
   export default defineComponent({
     name: 'AccountDetail',
@@ -42,28 +38,28 @@
     setup() {
       const route = useRoute();
       const go = useGo();
-      // 此处可以得到用户ID
-      const userId = ref(route.params?.id);
+      // 此处可以得到角色ID
+      const roleId = ref(route.params?.id);
       const currentKey = ref('detail');
       const { setTitle } = useTabs();
       // TODO
-      // 本页代码仅作演示，实际应当通过userId从接口获得用户的相关资料
+      // 本页代码仅作演示，实际应当通过roleId从接口获得角色的相关资料
 
       // 设置Tab的标题（不会影响页面标题）
-      setTitle('详情：用户' + userId.value);
+      setTitle('详情：角色' + roleId.value);
 
-      const user = ref(null);
+      const role = ref(null);
 
       onMounted(async () => {
-        user.value = await getAccountById(userId.value);
+        role.value = await getRoleById(roleId.value);
       });
 
       // 页面左侧点击返回链接时的操作
       function goBack() {
         // 本例的效果时点击返回始终跳转到账号列表页，实际应用时可返回上一页
-        go('/system/account');
+        go('/system/role');
       }
-      return { userId, currentKey, goBack, user };
+      return { roleId, currentKey, goBack, role };
     },
   });
 </script>

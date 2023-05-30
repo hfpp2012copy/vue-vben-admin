@@ -1,15 +1,12 @@
 import { getAllRoleList, isAccountExist } from '/@/api/demo/system';
 import { BasicColumn, FormSchema } from '/@/components/Table';
+import { formatToDateTime } from '/@/utils/dateUtil';
 
 export const columns: BasicColumn[] = [
   {
     title: '用户名',
-    dataIndex: 'account',
-    width: 120,
-  },
-  {
-    title: '昵称',
-    dataIndex: 'nickname',
+    dataIndex: 'username',
+    sorter: true,
     width: 120,
   },
   {
@@ -18,31 +15,44 @@ export const columns: BasicColumn[] = [
     width: 120,
   },
   {
+    title: '所属部门',
+    dataIndex: 'department',
+    width: 120,
+    customRender: ({ record }) => {
+      const department = record.department;
+      return department.depName;
+    },
+  },
+  {
     title: '创建时间',
-    dataIndex: 'createTime',
+    dataIndex: 'createdAt',
     width: 180,
+    customRender: ({ record }) => {
+      const createdAt = record.createdAt;
+      return formatToDateTime(createdAt);
+    },
   },
   {
     title: '角色',
-    dataIndex: 'role',
+    dataIndex: 'roles',
     width: 200,
-  },
-  {
-    title: '备注',
-    dataIndex: 'remark',
+    customRender: ({ record }) => {
+      const roles = record.roles;
+      return roles?.map((role) => role.name)?.join();
+    },
   },
 ];
 
 export const searchFormSchema: FormSchema[] = [
   {
-    field: 'account',
+    field: 'username',
     label: '用户名',
     component: 'Input',
     colProps: { span: 8 },
   },
   {
-    field: 'nickname',
-    label: '昵称',
+    field: 'email',
+    label: '邮箱',
     component: 'Input',
     colProps: { span: 8 },
   },

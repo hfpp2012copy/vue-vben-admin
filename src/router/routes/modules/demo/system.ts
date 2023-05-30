@@ -44,6 +44,18 @@ const system: AppRouteModule = {
       },
       component: () => import('/@/views/demo/system/role/index.vue'),
     },
+    {
+      path: 'role_detail/:id',
+      name: 'RoleDetail',
+      meta: {
+        hideMenu: true,
+        title: t('routes.demo.system.role_detail'),
+        ignoreKeepAlive: true,
+        showMenu: false,
+        currentActiveMenu: '/system/role',
+      },
+      component: () => import('/@/views/demo/system/role/RoleDetail.vue'),
+    },
 
     {
       path: 'menu',

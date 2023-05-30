@@ -9,6 +9,11 @@
           <TableAction
             :actions="[
               {
+                icon: 'clarity:info-standard-line',
+                tooltip: '查看用户详情',
+                onClick: handleView.bind(null, record),
+              },
+              {
                 icon: 'clarity:note-edit-line',
                 onClick: handleEdit.bind(null, record),
               },
@@ -40,10 +45,13 @@
 
   import { columns, searchFormSchema } from './role.data';
 
+  import { useGo } from '/@/hooks/web/usePage';
+
   export default defineComponent({
     name: 'RoleManagement',
     components: { BasicTable, RoleDrawer, TableAction },
     setup() {
+      const go = useGo();
       const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload }] = useTable({
         title: '角色列表',
@@ -56,7 +64,7 @@
         useSearchForm: true,
         showTableSetting: true,
         bordered: true,
-        showIndexColumn: false,
+        // showIndexColumn: false,
         actionColumn: {
           width: 80,
           title: '操作',
@@ -87,10 +95,15 @@
         reload();
       }
 
+      function handleView(record: Recordable) {
+        go('/system/role_detail/' + record.id);
+      }
+
       return {
         registerTable,
         registerDrawer,
         handleCreate,
+        handleView,
         handleEdit,
         handleDelete,
         handleSuccess,
