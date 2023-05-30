@@ -96,7 +96,7 @@ export const accountFormSchema: FormSchema[] = [
     component: 'TreeSelect',
     componentProps: {
       fieldNames: {
-        label: 'deptName',
+        label: 'depName',
         key: 'id',
         value: 'id',
       },

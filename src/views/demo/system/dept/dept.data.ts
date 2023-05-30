@@ -1,45 +1,27 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
-import { h } from 'vue';
-import { Tag } from 'ant-design-vue';
+import { formatToDateTime } from '/@/utils/dateUtil';
 
 export const columns: BasicColumn[] = [
   {
     title: '部门名称',
-    dataIndex: 'deptName',
+    dataIndex: 'depName',
     width: 160,
     align: 'left',
   },
   {
-    title: '排序',
-    dataIndex: 'orderNo',
-    width: 50,
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    width: 80,
-    customRender: ({ record }) => {
-      const status = record.status;
-      const enable = ~~status === 0;
-      const color = enable ? 'green' : 'red';
-      const text = enable ? '启用' : '停用';
-      return h(Tag, { color: color }, () => text);
-    },
-  },
-  {
     title: '创建时间',
-    dataIndex: 'createTime',
+    dataIndex: 'createdAt',
     width: 180,
-  },
-  {
-    title: '备注',
-    dataIndex: 'remark',
+    customRender: ({ record }) => {
+      const createdAt = record.createdAt;
+      return formatToDateTime(createdAt);
+    },
   },
 ];
 
 export const searchFormSchema: FormSchema[] = [
   {
-    field: 'deptName',
+    field: 'depName',
     label: '部门名称',
     component: 'Input',
     colProps: { span: 8 },
