@@ -43,11 +43,11 @@
         const treeData = await getDeptList();
         updateSchema([
           {
-            field: 'pwd',
+            field: 'password',
             show: !unref(isUpdate),
           },
           {
-            field: 'dept',
+            field: 'departmentId',
             componentProps: { treeData },
           },
         ]);
@@ -60,7 +60,7 @@
           const values = await validate();
           setModalProps({ confirmLoading: true });
           // TODO custom api
-          console.log(values);
+          console.log({ ...values, roleIds: [...values.roles] });
           closeModal();
           emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
         } finally {

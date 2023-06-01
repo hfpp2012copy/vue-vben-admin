@@ -21,7 +21,8 @@ enum Api {
   setRoleStatus = '/system/setRoleStatus',
   MenuList = '/system/getMenuList',
   RolePageList = '/roles',
-  GetAllRoleList = '/system/getAllRoleList',
+  GetAllRoleList = '/roles',
+  ChangePassword = '/users/profile',
 }
 
 export const getAccountList = (params: AccountParams) =>
@@ -45,6 +46,16 @@ export const getAllRoleList = (params?: RoleParams) =>
 
 export const setRoleStatus = (id: number, status: string) =>
   defHttp.post({ url: Api.setRoleStatus, params: { id, status } });
+
+export const changePassword = (oldPassword: string, newPassword: string) =>
+  defHttp.put({
+    url: Api.ChangePassword,
+    params: {
+      password: newPassword,
+      confirmPassword: newPassword,
+      currentPassword: oldPassword,
+    },
+  });
 
 export const isAccountExist = (account: string) =>
   defHttp.post({ url: Api.IsAccountExist, params: { account } }, { errorMessageMode: 'none' });

@@ -15,6 +15,10 @@
   import { BasicForm, useForm } from '/@/components/Form';
 
   import { formSchema } from './pwd.data';
+  import { changePassword } from '/@/api/demo/system';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useUserStoreWithOut } from '/@/store/modules/user';
+
   export default defineComponent({
     name: 'ChangePassword',
     components: { BasicForm, PageWrapper },
@@ -27,6 +31,9 @@
         schemas: formSchema,
       });
 
+      const { createMessage } = useMessage();
+      const userStore = useUserStoreWithOut();
+
       async function handleSubmit() {
         try {
           const values = await validate();
@@ -34,9 +41,17 @@
 
           // TODO custom api
           console.log(passwordOld, passwordNew);
+
+          await changePassword(passwordOld, passwordNew);
+          createMessage.success('修改成功');
+          userStore.logout(true);
           // const { router } = useRouter();
           // router.push(pageEnum.BASE_LOGIN);
-        } catch (error) {}
+        } catch (error: any) {
+          if (error?.errorFields) return;
+
+          createMessage.error(error?.response?.data?.message);
+        }
       }
 
       return { register, resetFields, handleSubmit };
