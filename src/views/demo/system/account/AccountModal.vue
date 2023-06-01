@@ -9,6 +9,8 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { accountFormSchema } from './account.data';
   import { getDeptList } from '/@/api/demo/system';
+  import { createUser } from '/@/api/sys/user';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   export default defineComponent({
     name: 'AccountModal',
@@ -54,15 +56,21 @@
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增账号' : '编辑账号'));
+      const { createMessage } = useMessage();
 
       async function handleSubmit() {
         try {
           const values = await validate();
           setModalProps({ confirmLoading: true });
           // TODO custom api
-          console.log({ ...values, roleIds: [...values.roles] });
+          const submitValues = { ...values, roleIds: [...values.roles] };
+          await createUser(submitValues);
           closeModal();
           emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
+        } catch (error: any) {
+          if (error?.errorFields) return;
+
+          createMessage.error(error?.response?.data?.message);
         } finally {
           setModalProps({ confirmLoading: false });
         }
